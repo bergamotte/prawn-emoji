@@ -1,3 +1,50 @@
+# Forked version
+
+This forked version of prawn-emoji just adds some up-to-date emojis to the original version.
+The newer emojis are extracted from https://github.com/jdecked/twemoji (assets/72x72 folder) and https://github.com/samuelngs/apple-emoji-linux (png/160 folder)
+For more info check
+
+These are the steps followed
+For extracting emojis from https://github.com/jdecked/twemoji (assets/72x72 folder):
+```bash
+# Clone with minimal history and no blobs
+git clone --depth 1 --filter=blob:none https://github.com/jdecked/twemoji.git
+cd twemoji
+
+# Please adapt target folder to your local path
+mv -f assets/72x72/* ../prawn-emoji/emoji/images/
+
+cd ..
+rm -rf twemoji
+```
+
+
+For extracting emojis from https://github.com/samuelngs/apple-emoji-linux (png/160 folder):
+
+```bash
+git clone --depth 1 --filter=blob:none https://github.com/samuelngs/apple-emoji-linux.git
+cd apple-emoji-linux
+
+cd png/160
+# Rename files to match expected name by prawn-emoji by removing the initial "emoji_u" of the file names
+for file in emoji_u*; do mv "$file" "${file:7}"; done
+
+cd -
+mv -f png/160/* ../prawn-emoji/emoji/images/
+
+cd ..
+rm -rf apple-emoji-linux
+```
+
+And then just update the index with
+
+```ruby
+bundle exec rake emoji:update_index
+```
+
+## License & Attribution
+This project includes emoji assets from Twemoji, Apple-Emoji-Linux, and Prawn-Emoji. See [ATTRIBUTIONS.md](./ATTRIBUTIONS.md) for details.
+
 # Prawn::Emoji
 
 [![Test](https://github.com/hidakatsuya/prawn-emoji/workflows/Test/badge.svg?branch=main)](https://github.com/hidakatsuya/prawn-emoji/actions)
